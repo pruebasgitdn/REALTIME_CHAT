@@ -24,7 +24,7 @@ Incluye autenticación basada en JWT almacenando en las cookies y comunicación 
 
 
 ## Instalación Local
-Backend
+- **Backend**
 
 ```
 cd server
@@ -43,11 +43,16 @@ JWT_EXPIRES
 COOKIE_EXPIRE
 CLIENT_DEV_URI
 CLIENT_PROD_URI
-Frontend
+```
+
+- **Frontend**
+
+```
 cd client
 npm install
 npm run dev
 ```
+
 
 
 ## POSIBLES Mejoras Futuras 
@@ -82,11 +87,10 @@ npm run dev
 - MongoDB Atlas (Base de datos)
 
 ## Autenticación y Seguridad
-El sistema utiliza JWT almacenado en cookies con las siguientes características:
-httpOnly
-secure
-sameSite: none
-expiración de 7 días
+**El sistema utiliza JWT almacenado en cookies con las siguientes características**:
+- httpOnly secure
+- sameSite: none
+- expiración de 7 días
 ### Flujo:
 1. Usuario inicia sesión.
 2. Se genera JWT desde el modelo.
@@ -135,13 +139,13 @@ ETC..
 - Persistencia de sesión y sus informacion asociada al cargar la aplicación.
 
 ## Retos Técnicos Enfrentados
-1. Cookies en Producción
+1. **Cookies en Producción**
 En desarrollo funcionaban correctamente, pero en producción fue necesario:
-Configurar secure: true
-Usar sameSite: none
-Ajustar variables de entorno en Vercel y Render
-Manejar detección automática de entorno
-2. Persistencia al hacer F5
-Se implementó verificación automática de sesión al montar la aplicación (App.jsx) atraves de un thunk que consulta el usuario basado en el token almacenado.
-3. Sincronización Redux + Socket
-Se planteo y se diseño una suscripción a los eventos después del login para garantizar que el estado global sea consistente en tiempo real y cumpla con la sincronizacion de escuchar los eventos a los que se suscribio previamente.
+  - Configurar secure: true
+  - Usar sameSite: none
+  - Ajustar variables de entorno en Vercel y Render
+  - Manejar detección automática de entorno
+2. **Persistencia al hacer F5**
+  - Se implementó verificación automática de sesión al montar la aplicación (App.jsx) atraves de un thunk que consulta el usuario basado en el token almacenado.
+3. **Sincronización Redux + Socket**
+  - Se planteo y se diseño una suscripción a los eventos después del login para garantizar que el estado global sea consistente en tiempo real y cumpla con la sincronizacion de escuchar los eventos a los que se suscribio previamente.
