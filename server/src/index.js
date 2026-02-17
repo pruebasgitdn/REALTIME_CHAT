@@ -35,16 +35,16 @@ app.use(express.urlencoded({ extended: true }));
 //servidor socket io
 app.use(
   cors({
-    origin: clientOrigin,
+    origin: [process.env.CLIENT_DEV_URI, process.env.CLIENT_PROD_URI],
     methods: ["PUT", "DELETE", "POST", "GET"],
     credentials: true,
-  })
+  }),
 );
 
 app.use(
   fileUpload({
     useTempFiles: true, //archivos temporales
-  })
+  }),
 );
 
 app.use("/api/auth", authRouter);
