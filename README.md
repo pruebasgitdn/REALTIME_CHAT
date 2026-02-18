@@ -92,13 +92,81 @@ npm run dev
 - sameSite: none
 - expiración de 7 días
 ### Flujo:
-1. Usuario inicia sesión.
-2. Se genera JWT desde el modelo.
+1. Usuario inicia sesión. **POST** `/api/auth/login`
+- En **LoginPage.tsx** se dispara el `dispatch(loginThunk(formData))` , que ejecuta el thunk de inicio de sesion que apunta a la ruta `/api/auth/login`
+
+3. Se implementa la funcion de generar JWT desde el modelo, desde el esquema el cual vemos que lo firma.
+- **users.model.js**
+```
+userSchema.methods.generateJWT = function () {
+  //Firma el token con el _id
+  return jwt.sign(
+    {
+      id: this._id,
+      fullName: this.fullName,
+      email: this.email,
+      profilePic: this.profilePic,
+      createdAt: this.createdAt,
+    },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: process.env.JWT_EXPIRES,
+    }
+  );
+};
+```
+Dicha funcion se invoca en la generacion del token, ejecutado en  el controlador del login una vez validado el inicio de sesion éxitoso.
+```
+export const generateToken = (user, message, statusCode, res) => {
+  const token = user.generateJWT(); //del modelo
+  const cookieName = "userToken";
+  const cookieOptions = {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  };
+  res.status(statusCode).cookie(cookieName, token, cookieOptions).json({
+    succes: true,
+    message,
+    user,
+    token,
+  });
+};
+
+```
 3. El token se almacena en cookie segura.
 
 4. El middleware verifyUserToken valida el token en cada petición.
-Si el token no se haya el token o es invalido, se limpian los estados globales:
+   
+```
+export const verifyUserToken = (req, res, next) => {
+  const token = req.cookies.userToken;
 
+  if (!token) {
+    return next(
+      new ErrorResponse(
+        "No se proporciona el token, autorización denegada.",
+        401,
+        null,
+        false
+      )
+    );
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.log(error);
+    return next(new ErrorResponse("Token inválido", 401, null, false));
+  }
+};
+```
+5. Si el token no se haya el token o es invalido, se limpian los estados globales (en el cliente):
+- En **App.tsx** se valida la autenticacion mediante un UseEffect , el cual si falla en esa validacion se limpian los estados
 ```
 setLogout()
 cleanChatSlice()
