@@ -147,7 +147,6 @@ export const generateToken = (user, message, statusCode, res) => {
 3. El token se almacena en cookie segura.
 
 4. El middleware verifyUserToken valida el token en cada petición.
-   
 ```
 export const verifyUserToken = (req, res, next) => {
   const token = req.cookies.userToken;
@@ -180,13 +179,59 @@ setLogout()
 cleanChatSlice()
 cleanGroupSlice()
 ```
-
 Esto nos asegura la consistencia o el enlance entre frontend y backend.
 
 ## Comunicación en Tiempo Real
-El proyecto utiliza Socket.io tanto en cliente como en servidor.
+### Flujo de Comunicación en Tiempo Real
+1. La conexión inicia en el **LoginPage.jsx** con ` dispatch(connecSocketThunk())`, conecta el socket del cliente y servidor.
+2. Que ejecuta la siguiente conexion pasando como query el id del usuario autenticado en ese momento (socket del cliente al backend)
+```
+   socket = io(REALBASE_URL, {
+      query: {
+        userId: userId,
+      },
+```
+Pasando a estar ahora en la lista de usuarios online , cuando se hace una conexion como se acabo de hacer.
+```
+const userSocketMap = {};
+io.on("connection", (socket) => {
+const userId = socket.handshake.query.userId;
+  if (userId) userSocketMap[userId] = socket.id;
 
-### Servidor
+  //servidor emitiendo a los clientes connectados
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+}
+```
+Esto retorna el socket de los usuarios en linea (socket del backend al cliente).
+
+3. Los mensajes son emitidos desde el controlador del backend una vez guardado el mensaje en la DB, lo que nos permite tener el almacenamiento de nuestras conversaciones e imagenes de la misma.
+```
+await newMessage.save();
+
+//funcionalidad en tiempo real
+const receiverSocketId = getReceiverSocketId(receiverId);
+if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", newMessage);
+}
+```
+Y en el cliente se esta suscrito a esa accion en especifico para que actualize el estado y envie las notificaciones pertinentes según sea el caso
+```
+export const subscribeSocketNewMessageEvent = (dispatch, selectedUser) => {
+
+socket.on("newMessage", (message) => {
+   dispatch(addMessage(message)); 
+}}
+```
+Esto actualiza el estado global de mensajes de ese usuario que esta suscrito a dicho evento.
+
+4. Con todo esto ya estamos en linea y podremos ejecutar acciones como:
+- Enviar Mensajes privados
+- Enviar Mensajes a Grupos
+- Crear salas y unirse a las mismas, ser añadido o añadir
+- Administrar salas
+- ...
+
+### Socket del Servidor
 - Manejo de conexiones activas
 - Mapa de usuarios conectados
 - Rooms dinámicas para chats grupales
@@ -197,7 +242,7 @@ El proyecto utiliza Socket.io tanto en cliente como en servidor.
   - Otros: `removedFromGroup`, `addedToGroup`, `groupDeleted`.
   - ...
 
-### Cliente
+### Socket del Cliente
 - Conexión con el socket del servidor pasando userId como query 
 - Suscripción a eventos después del login
 - Despacho automático de acciones Redux al recibir eventos
@@ -216,8 +261,6 @@ La aplicación utiliza **Redux Toolkit** para manejar los estados de usuario, me
 - Todos los slices se combinan en un único **store** , accesible para toda la aplicación a traves de `useSelector` y `useDispatch`.
 - Los **slices** se actualizan mediante **acciones y dispatch**.  
   - **Ejemplo**, cuando el servidor envía un nuevo mensaje vía Socket.io, el cliente despacha `addMessage` en `chatSlice` para actualizar el estado global.
-
-
 
 ## Decisiones Técnicas Importantes
 - Uso de cookies HTTPOnly en lugar de localStorage para guardar la identificacion del usuario
