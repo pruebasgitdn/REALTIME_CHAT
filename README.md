@@ -1,4 +1,4 @@
-f# RealtimeChat
+# RealtimeChat
 Aplicación de mensajería en tiempo real desarrollada con arquitectura cliente-servidor.
 Incluye autenticación basada en JWT almacenando en las cookies y comunicación bidireccional vía WebSockets.
 
@@ -25,7 +25,6 @@ Incluye autenticación basada en JWT almacenando en las cookies y comunicación 
 
 ## Instalación Local
 - **Backend**
-
 ```
 cd server
 npm install
@@ -46,13 +45,21 @@ CLIENT_PROD_URI
 ```
 
 - **Frontend**
-
 ```
 cd client
 npm install
 npm run dev
 ```
 
+Variables necesarias:
+```
+VITE_REACT_APP_BASE_DEV_URI=http://localhost:4000
+VITE_REACT_APP_BACKEND_PROD_URI=https://realtime-chat-90sb.onrender.com
+```
+
+- **Credenciales de prueba**
+    - **Usuario**: '....'
+    - **Password**: '....'
 
 
 ## POSIBLES Mejoras Futuras 
