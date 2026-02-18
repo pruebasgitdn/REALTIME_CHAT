@@ -8,6 +8,7 @@ Incluye autenticación basada en JWT almacenando en las cookies y comunicación 
 ### Frontend: desplegado en Vercel
 ### Backend: desplegado en Render
 ### Base de datos: MongoDB Atlas
+### WebSocket: Socket.io
 (link , video demo)
 
 ## Características principales
