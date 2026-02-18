@@ -1,4 +1,4 @@
-# RealtimeChat
+f# RealtimeChat
 Aplicación de mensajería en tiempo real desarrollada con arquitectura cliente-servidor.
 Incluye autenticación basada en JWT almacenando en las cookies y comunicación bidireccional vía WebSockets.
 
@@ -57,7 +57,7 @@ npm run dev
 
 ## POSIBLES Mejoras Futuras 
 - Eliminación de mensajes
-- Indicador de "typing..."
+- Indicador de "Escribiendo..."
 - Encriptación de mensajes
 - Soporte para mensajes de voz 
 - Arquitectura 
@@ -95,7 +95,7 @@ npm run dev
 1. Usuario inicia sesión. **POST** `/api/auth/login`
 - En **LoginPage.tsx** se dispara el `dispatch(loginThunk(formData))` , que ejecuta el thunk de inicio de sesion que apunta a la ruta `/api/auth/login`
 
-3. Se implementa la funcion de generar JWT desde el modelo, desde el esquema el cual vemos que lo firma.
+2. Se implementa la funcion de generar JWT desde el modelo, desde el esquema el cual vemos que lo firma.
 - **users.model.js**
 ```
 userSchema.methods.generateJWT = function () {
@@ -183,15 +183,11 @@ El proyecto utiliza Socket.io tanto en cliente como en servidor.
 - Mapa de usuarios conectados
 - Rooms dinámicas para chats grupales
 - Eventos personalizados:
-- joinRoom
-- sendRoomMessage
-- newGroupMessage
-- removedFromGroup
-- addedToGroup
-- notifyChangeGroupNameEdited,
-- memberLeft
-- groupDeleted
-ETC..
+  - `joinRoom`  agrega usuario a la sala.
+  - `sendRoomMessage`  recibe mensaje y lo emite a la sala.
+  - `newGroupMessage`  sincroniza mensajes de grupos.
+  - Otros: `removedFromGroup`, `addedToGroup`, `groupDeleted`.
+  - ...
 
 ### Cliente
 - Conexión con el socket del servidor pasando userId como query 
@@ -199,6 +195,21 @@ ETC..
 - Despacho automático de acciones Redux al recibir eventos
 - Sincronización inmediata del estado global
 - A la escucha de lo que se emita y viceversa
+
+
+## Estados globales
+La aplicación utiliza **Redux Toolkit** para manejar los estados de usuario, mensajes y grupos:
+- **themeSlice**: gestiona el cambio de tema (colores) de la aplicacion
+- **authSlice**: maneja el estado del usuario
+- **chatSlice**: encargado de gestionar el estado de mensajes global, salas y privado
+- **groupSlice**: gestion de grupos o salas
+
+### Flujo de actualización
+- Todos los slices se combinan en un único **store** , accesible para toda la aplicación a traves de `useSelector` y `useDispatch`.
+- Los **slices** se actualizan mediante **acciones y dispatch**.  
+  - **Ejemplo**, cuando el servidor envía un nuevo mensaje vía Socket.io, el cliente despacha `addMessage` en `chatSlice` para actualizar el estado global.
+
+
 
 ## Decisiones Técnicas Importantes
 - Uso de cookies HTTPOnly en lugar de localStorage para guardar la identificacion del usuario
