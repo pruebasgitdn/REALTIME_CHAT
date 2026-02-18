@@ -54,7 +54,7 @@ npm run dev
 Variables necesarias:
 ```
 VITE_REACT_APP_BASE_DEV_URI=http://localhost:4000
-VITE_REACT_APP_BACKEND_PROD_URI=https://realtime-chat-90sb.onrender.com
+VITE_REACT_APP_BACKEND_PROD_URI=https://realtime-chat-neon-xi.vercel.app
 ```
 
 - **Credenciales de prueba**
