@@ -5,9 +5,9 @@ Incluye autenticación basada en JWT almacenando en las cookies y comunicación 
 - ( y un par de imagenes (?))
 
 ## Demo
-- Frontend: desplegado en Vercel
-- Backend: desplegado en Render
-- Base de datos: MongoDB Atlas
+### Frontend: desplegado en Vercel
+### Backend: desplegado en Render
+### Base de datos: MongoDB Atlas
 (link , video demo)
 
 ## Características principales
