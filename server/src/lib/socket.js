@@ -16,7 +16,7 @@ console.log("origin:", clientOrigin);
 
 const io = new Server(server, {
   cors: {
-    origin: clientOrigin,
+    origin: [process.env.CLIENT_DEV_URI, process.env.CLIENT_PROD_URI],
   },
 });
 
