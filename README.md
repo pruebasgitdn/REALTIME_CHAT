@@ -2,7 +2,7 @@
 Aplicación de mensajería en tiempo real desarrollada con arquitectura cliente-servidor.
 Incluye autenticación basada en JWT almacenando en las cookies y comunicación bidireccional vía WebSockets.
 
-- imgs
+- ![Captura de pantalla](./client/public/assets/Capturalogin.png)
 - [Ver Demo - Link YouTube](https://www.youtube.com/watch?v=UiC4Uom4cRw&t=9s)
 
 
@@ -60,8 +60,8 @@ VITE_REACT_APP_BACKEND_PROD_URI=https://realtime-chat-neon-xi.vercel.app
 ```
 
 - **Credenciales de prueba**
-    - **Usuario**: '....'
-    - **Password**: '....'
+    - **Usuario**: 'carlos@gmail.com'
+    - **Password**: 'danilo11'
 
 
 ## POSIBLES Mejoras Futuras 
