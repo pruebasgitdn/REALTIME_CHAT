@@ -2,14 +2,15 @@
 Aplicación de mensajería en tiempo real desarrollada con arquitectura cliente-servidor.
 Incluye autenticación basada en JWT almacenando en las cookies y comunicación bidireccional vía WebSockets.
 
-- ( y un par de imagenes (?))
+- imgs
+- [Ver Demo - Link YouTube](https://www.youtube.com/watch?v=UiC4Uom4cRw&t=9s)
+
 
 ## Demo
 ### Frontend: desplegado en Vercel
 ### Backend: desplegado en Render
 ### Base de datos: MongoDB Atlas
 ### WebSocket: Socket.io
-(link , video demo)
 
 ## Características principales
 - Registro e inicio de sesión con JWT en cookies HTTPOnly
